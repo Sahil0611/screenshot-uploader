@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload Screenshot</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; background: #f9f9f9; }
+    form { background: white; padding: 1rem; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input, button { padding: 10px; margin-top: 10px; width: 100%; }
+  </style>
+</head>
+<body>
+
+ <h2>Upload Your Android Screenshot – v1.1</h2>
+  <form id="screenshotForm">
+    <input type="file" id="screenshot" accept="image/*" required />
+    <button type="submit">Upload Screenshot</button>
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    const form = document.getElementById('screenshotForm');
+    const statusEl = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('screenshot');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        statusEl.textContent = "Please select an image file.";
+        return;
+      }
+
+      statusEl.textContent = "Uploading...";
+
+      // For now, just show the filename (you can replace with Firebase upload here)
+      // TODO: Add upload logic to Firebase or backend
+      await new Promise(resolve => setTimeout(resolve, 1500)); // simulate delay
+      statusEl.textContent = `✔️ Uploaded: ${file.name}`;
+    });
+  </script>
+
+</body>
+</html>
