@@ -6,14 +6,47 @@
   <body>
     <h2>Upload Your Android Screenshot – v1.1</h2>
 <form id="screenshotForm">
-  <input type="file" id="screenshot" accept="image/*" required />
+  <input type="file" id="screenshot" name="screenshot" accept="image/*" required />
   <button type="submit">Upload Screenshot</button>
 </form>
+
+<p id="status"></p>
+
 <script>
-  fetch("http://localhost:5000/upload", {
-  method: "POST",
-  body: formData,
-})
+  const form = document.getElementById('screenshotForm');
+  const statusEl = document.getElementById('status');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('screenshot');
+    const file = fileInput.files[0];
+
+    if (!file) {
+      statusEl.textContent = "❌ No file selected.";
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("screenshot", file); // 🔴 Must match Flask’s expected key!
+
+    try {
+      const res = await fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await res.json();
+      if (result.status === "success") {
+        statusEl.textContent = `✅ Success! Screen: ${result.screen_time_min} mins, Unlocks: ${result.unlocks}, Notifs: ${result.notifications}`;
+      } else {
+        statusEl.textContent = "❌ Failed to extract metrics.";
+      }
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = "❌ Upload failed. Server error.";
+    }
+  });
 </script>
+
   </body>
 </html>
