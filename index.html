@@ -9,5 +9,11 @@
   <input type="file" id="screenshot" accept="image/*" required />
   <button type="submit">Upload Screenshot</button>
 </form>
+<script>
+  fetch("http://localhost:5000/upload", {
+  method: "POST",
+  body: formData,
+})
+</script>
   </body>
 </html>
